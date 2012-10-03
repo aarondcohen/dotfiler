@@ -22,36 +22,5 @@ $dotfiler->dot_symbol('<DOT>');
 is $dotfiler->to_dot('/some/<DOT>directory/<DOT>hidden/foo<DOT>bar.txt'), '/some/.directory/foo<DOT>.txt', 'to_dot converts all starting symbols to .';
 is $dotfiler->from_dot('/some/.directory/.hidden/foo.bar.txt'), '/some/<DOT>directory/<DOT>hidden/foo.bar.txt', 'from_dot converts all starting . to symbols';
 
-is $dotfiler->to_dot($dotfiler->from_dot('/some/.directory/foo.txt')), '/some/.directory/foo.txt', '';
-is $dotfiler->from_dot($dotfiler->to_dot('/some/<DOT>directory/foo.txt')), '/some/<DOT>directory/foo.txt', '';
-
-=head
-
-
-
-is $dotfiler->backup_directory(undef), undef, "";
-is $dotfiler->backup_directory(''), '/', "";
-is $dotfiler->backup_directory('/some/directry'), './', "";
-
-$value = "";
-lives_ok { $dotfiler->backup_directory($value) } "";
-is $dotfiler->backup_directory, $value, "";
-
-$value = "";
-lives_ok { $dotfiler->dot_symbol($value) } "";
-is $dotfiler->dot_symbol, $value, "";
-
-$value = "";
-lives_ok { $dotfiler->install_directory($value) } "";
-is $dotfiler->install_directory, $value, "";
-
-$dotfiler = Dotfiler->new(
-	backup_directory => "",
-	dot_symbol => "",
-	install_directory => "",
-	source_directory => "",
-);
-
-is $dotfiler->backup_directory, $value, "";
-is $dotfiler->dot_symbol, $value, "";
-is $dotfiler->install_directory, $value, "";
+is $dotfiler->to_dot($dotfiler->from_dot('/some/.directory/foo.txt')), '/some/.directory/foo.txt', 'to_dot inverts the changes of from_dot';
+is $dotfiler->from_dot($dotfiler->to_dot('/some/<DOT>directory/foo.txt')), '/some/<DOT>directory/foo.txt', 'from_dot inverts the change of to_dot';

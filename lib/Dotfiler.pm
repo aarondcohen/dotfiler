@@ -56,9 +56,10 @@ sub is_debug {
 sub backup {
 	my $this = shift;
 	my ($source_directory) = @_;
-	die "" unless -d $source_directory;
+
 	$source_directory = $this->_normalize_directory($source_directory);
 
+	die "Source directory [$source_directory] could not be found for backup" unless -d $source_directory;
 	die "Backup requires both an installation and backup directory" unless $this->backup_directory && $this->install_directory;
 
 	my @source_files;
@@ -69,6 +70,8 @@ sub backup {
 		substr $relative_file, 0, length $source_directory, '';
 
 		my $destination_file = $this->install_directory . $this->to_dot($relative_file);
+
+		$this->_debug("Examining file [$source_file] for backup");
 
 		#Only backup files if we know where to back them up to
 		#and a differing file would be overwritten
@@ -84,9 +87,10 @@ sub backup {
 sub install {
 	my $this = shift;
 	my ($source_directory) = @_;
-	die "" unless -d $source_directory;
+
 	$source_directory = $this->_normalize_directory($source_directory);
 
+	die "Source directory [$source_directory] could not be found for install" unless -d $source_directory;
 	die "Install requires an installation directory" unless $this->install_directory;
 
 	my @source_files;
@@ -95,6 +99,8 @@ sub install {
 	for my $source_file (@source_files) {
 		my $relative_file = $source_file;
 		substr $relative_file, 0, length $source_directory, '';
+
+		$this->_debug("Examining file [$source_file] for installation");
 
 		eval { $this->_copy_file($source_file, $this->install_directory . $this->to_dot($relative_file)); 1 }
 			|| die "Failed during installation: $@";
