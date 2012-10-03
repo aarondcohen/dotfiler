@@ -115,7 +115,7 @@ sub from_dot {
 
 	return $file_path if $this->dot_symbol eq '';
 
-	my $dot_symbol = quotemeta $this->dot_symbol;
+	my $dot_symbol = $this->dot_symbol;
 	$file_path =~ s#(?:^|/)\.#$dot_symbol#g;
 
 	return $file_path;
